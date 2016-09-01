@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="torpedo.event_sourcing.event_publisher"
+                 class="Torpedo\EventSourcingBundle\EventPublisher\LazySynchronousEventPublisher">
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <service id="torpedo.event_sourcing_bundle.rocket_test_use_case.launch_rocket_command_handler"
+                 class="Torpedo\EventSourcingBundle\RocketTestUseCase\LaunchRocketCommandHandler">
+            <argument type="service" id="torpedo.event_sourcing.event_publisher"/>
+            <argument type="service" id="torpedo.time.clock"/>
+        </service>
+
+        <service
+                class="Torpedo\EventSourcingBundle\RocketTestUseCase\LaunchLogProjector"
+                id="torpedo_event_sourcing.rocket_test_use_case.launch_log_projector">
+            <argument type="service"
+                      id="torpedo_event_sourcing.rocket_test_use_case.launch_log_read_model_repository"/>
+            <tag name="torpedo.listens_synchronously_to_events"/>
+        </service>
+
+        <service
+                class="Torpedo\EventSourcingBundle\RocketTestUseCase\LaunchLogReadModelRepository"
+                id="torpedo_event_sourcing.rocket_test_use_case.launch_log_read_model_repository">
+        </service>
+
+    </services>
+
+</container>

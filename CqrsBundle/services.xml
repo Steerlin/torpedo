@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+
+    <services>
+
+        <service id="cqrs.command.command_dispatcher" class="Torpedo\CqrsBundle\Command\LazyContainerCommandDispatcher">
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <service id="cqrs.command.command_deserializer" class="Torpedo\CqrsBundle\Command\JsonCommandDeserializer">
+        </service>
+
+        <service id="torpedo_cqrs.command.command_dispatcher_controller"
+                 class="Torpedo\CqrsBundle\Command\CommandDispatcherController">
+            <argument type="service" id="cqrs.command.command_dispatcher"/>
+            <argument type="service" id="cqrs.command.command_deserializer"/>
+            <argument type="service" id="doctrine.orm.entity_manager"/>
+        </service>
+    </services>
+
+</container>
